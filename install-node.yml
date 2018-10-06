@@ -1,0 +1,25 @@
+---
+- hosts: all
+  sudo: yes
+  remote_user: root
+  gather_facts: no
+  pre_tasks:
+    - name: 'Download Repo Setup'
+      get_url: 
+        url: https://deb.nodesource.com/setup_8.x
+        dest: /tmp/node-repo-setup.sh
+    - name: 'Make Repo Setup Executable'
+      file:
+        path: /tmp/node-repo-setup.sh
+        state: file
+        mode: +x
+    - name: 'Run Repo Setup'
+      shell: /tmp/node-repo-setup.sh
+    - name: 'Remove Repo Setup'
+      file: 
+        path: /tmp/node-repo-setup.sh
+        state: absent
+  tasks:
+    - name: 'Install NodeJS'
+      apt:
+        name: nodejs 

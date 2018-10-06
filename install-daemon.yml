@@ -1,0 +1,20 @@
+---
+- hosts: all
+  sudo: yes
+  remote_user: root
+  gather_facts: no
+  pre_tasks:
+    - name: 'Download Files'
+      get_url:
+        url: https://github.com/pterodactyl/daemon/releases/download/v0.6.5/daemon.tar.gz
+        dest: /srv/daemon/daemon.tar.gz
+
+  tasks:
+    - name: 'Extract Files'
+      shell: tar --strip-components=1 -xzv daemon.tar.gz
+      args:
+        chdir: /srv/daemon
+    - name: 'Install Node Modules'
+      shell: npm install --only=production 
+      args:
+        chdir: /srv/daemon
